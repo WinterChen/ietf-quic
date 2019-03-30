@@ -1,3 +1,6 @@
+# Using TLS to Secure QUIC(draft-ietf-quic-tls-19)
+
+```
 QUIC                                                     M. Thomson, Ed.
 Internet-Draft                                                   Mozilla
 Intended status: Standards Track                          S. Turner, Ed.
@@ -8,12 +11,13 @@ Expires: September 12, 2019                                        sn3rd
                         Using TLS to Secure QUIC
                          draft-ietf-quic-tls-19
 
-Abstract
+```
+## Abstract
 
    This document describes how Transport Layer Security (TLS) is used to
    secure QUIC.
 
-Note to Readers
+## Note to Readers
 
    Discussion of this draft takes place on the QUIC working group
    mailing list (quic@ietf.org), which is archived at
@@ -23,7 +27,7 @@ Note to Readers
    [2]; source code and issues list for this draft can be found at
    https://github.com/quicwg/base-drafts/labels/-tls [3].
 
-Status of This Memo
+## Status of This Memo
 
    This Internet-Draft is submitted in full conformance with the
    provisions of BCP 78 and BCP 79.
@@ -40,18 +44,10 @@ Status of This Memo
 
    This Internet-Draft will expire on September 12, 2019.
 
-Copyright Notice
+## Copyright Notice
 
    Copyright (c) 2019 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-
-
-Thomson & Turner       Expires September 12, 2019               [Page 1]
- 
-Internet-Draft                QUIC over TLS                   March 2019
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -64,7 +60,7 @@ Internet-Draft                QUIC over TLS                   March 2019
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
-Table of Contents
+## Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Notational Conventions  . . . . . . . . . . . . . . . . . . .   4
@@ -102,13 +98,6 @@ Table of Contents
      8.1.  Protocol and Version Negotiation  . . . . . . . . . . . .  28
      8.2.  QUIC Transport Parameters Extension . . . . . . . . . . .  28
      8.3.  Removing the EndOfEarlyData Message . . . . . . . . . . .  29
-
-
-
-Thomson & Turner       Expires September 12, 2019               [Page 2]
- 
-Internet-Draft                QUIC over TLS                   March 2019
-
 
    9.  Security Considerations . . . . . . . . . . . . . . . . . . .  29
      9.1.  Replay Attacks with 0-RTT . . . . . . . . . . . . . . . .  29
@@ -148,4 +137,4 @@ Internet-Draft                QUIC over TLS                   March 2019
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  42
 
 1.  Introduction
-
+本文描述QUIC[QUIC传输协议](https://tools.ietf.org/html/draft-ietf-quic-transport-19)如何通过TSL[TSL13](https://tools.ietf.org/html/rfc8446)保证安全。
