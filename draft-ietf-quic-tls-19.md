@@ -61,7 +61,7 @@ Expires: September 12, 2019                                        sn3rd
    described in the Simplified BSD License.
 
 ## Table of Contents
-
+```
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Notational Conventions  . . . . . . . . . . . . . . . . . . .   4
      2.1.  TLS Overview  . . . . . . . . . . . . . . . . . . . . . .   4
@@ -135,6 +135,34 @@ Expires: September 12, 2019                                        sn3rd
    Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  42
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  42
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  42
+```
+## 1.  Introduction
+本文描述QUIC[QUIC传输协议](https://tools.ietf.org/html/draft-ietf-quic-transport-19)如何通过TSL[TSL13](https://tools.ietf.org/html/rfc8446)保证安全。    
+相比之前的版本，TLS 1.3为连接建立提供了关键的延迟改进。不考虑丢包的情况下，大部分连接可以在一个来回（1-RTT）内建立和保护。在同一客户机和服务器之间的后续连接上，客户机通常可以立即发送应用程序数据，也即使用0-RTT。  
+本文档描述了tls如何充当quic的安全组件。  
+## 2.  符号约定
+本文件使用了[QUIC传输协议](https://tools.ietf.org/html/draft-ietf-quic-transport-19)中规定的术语。  
+为了简洁起见，缩写tls用于引用tls 1.3，尽管可以使用较新版本（见第4.2节)。  
+### 2.1.  TLS 概述
+TLS为两个端点在不可信媒介（互联网）上建立通信提供了方法，确保信息交换无法被观察、修改或伪造。  
+在内部，tls是一个分层协议，其结构如图所示以下：  
+```
+   +--------------+--------------+--------------+
+   |  Handshake   |    Alerts    |  Application |
+   |    Layer     |              |     Data     |
+   |              |              |              |
+   +--------------+--------------+--------------+
+   |                                            |
+   |               Record Layer                 |
+   |                                            |
+   +--------------------------------------------+
+```
+每个上层（握手、警报和应用程序数据）都被当作一个类型化的TLS记录序列携带。记录是单独加密保护的，然后通过可靠传输（典型的比如TCP）保证有序和可靠。  
 
-1.  Introduction
-本文描述QUIC[QUIC传输协议](https://tools.ietf.org/html/draft-ietf-quic-transport-19)如何通过TSL[TSL13](https://tools.ietf.org/html/rfc8446)保证安全。
+不能在quic中发送Change Cipher Spec（更改密码规格）记录。
+　>Change Cipher Spec协议独立于握手协议，单独属于一类，也是其中最简单的一个。协议由单个消息组成 , 该消息只包含一个值为 1 的单个字节。该消息由客户端和服务器端各自发出用来通知对方，从这个消息以后要开始使用之前协商好的密钥套件了，这个消息一般是在握手到发出 Finish 消息之前发出。  
+
+TLS身份认证的密钥交换在客户端和服务器两个实体中发生。client启动Exchange，server响应。如果密钥交换成功完成，client和server会同意一个密码。TLS支持两个预共享密钥（PSK）和diffie-hellman（DH）密钥交换。PSK是0-RTT的基础，在密钥被销毁后DH保证完全的前向保密（perfect forward secrecy，PFS） 
+ >完全的前向保密（perfect forward secrecy，PFS），简单来说就是密钥泄漏出去，不会造成之前通讯时使用的会话密钥泄漏，不会暴露之前的通信内容。PFS不能保证泄漏后的通信安全，但是要保证泄漏前的通信安全。的安全要求一个密钥只能访问由它所保护的数据；用来产生密钥的元素一次一换，不能再产生其他的密钥；一个密钥被破解，并不影响其他密钥的安全性。  
+
+   
